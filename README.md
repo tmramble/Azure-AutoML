@@ -2,120 +2,143 @@
 
 # 📈 Bike Rental Demand Prediction with Azure AutoML
 
-## Overview
-
-This project demonstrates an end-to-end machine learning workflow using **Azure Machine Learning Studio**. The goal is to predict hourly **bike rental demand** based on time, weather, and calendar data using **Automated Machine Learning (AutoML)**.
-
-This project includes training, evaluating, and deploying a regression model using Azure services and testing it with real-time data through a deployed REST API.
+This project showcases how to build, train, deploy, and test a machine learning regression model using **Azure Machine Learning Studio's Automated ML (AutoML)**. It predicts bike rentals based on environmental and calendar data — perfect for your portfolio or LinkedIn.
 
 ---
 
-## 🚲 Problem Statement
+## 🔧 Why This Project?
 
-> How can we predict the number of bikes rented in a given hour based on environmental and temporal features?
-
-Accurate predictions can help businesses optimize bike availability, maintenance, and staffing based on demand forecasts.
+Bike rental services and city planners need accurate forecasts to allocate bikes efficiently. Regression models help estimate rentals by analyzing patterns in weather, seasons, and time.
 
 ---
 
-## 🔧 Technologies Used
+## ✅ Step 1: Set Up Azure ML Workspace
 
-- **Azure Machine Learning Studio**
-- **Azure Blob Storage**
-- **Automated Machine Learning (AutoML)**
-- **Azure Container Instances (ACI)**
-- **Python (for endpoint consumption)**
-- **Regression Algorithms**: LightGBM, RandomForest
+1. Sign in at [Azure Portal](https://portal.azure.com)
+2. Select **+ Create a resource** > Search for **Machine Learning**
+3. Use the following settings:
+   - **Subscription**: Your Azure subscription
+   - **Resource group**: New or existing
+   - **Region**: East US
+   - **Workspace name**: Must be unique
+   - **Other fields**: Leave defaults (Azure will create supporting services)
+4. Click **Review + Create** > then **Create**
+5. After deployment, click **Launch studio**
 
----
-
-## 📁 Dataset
-
-- **Source**: [Capital Bikeshare](https://www.capitalbikeshare.com/system-data)
-- **Features**:
-  - Date/time attributes: season, year, month, hour, weekday, holiday
-  - Weather attributes: temperature, humidity, windspeed
-  - Target: `rentals` (number of bikes rented)
+{SCREENSHOT}
 
 ---
 
-## 🚀 Project Workflow
+## ✅ Step 2: Upload & Register Dataset
 
-### 1. Workspace Setup
-- Created an Azure ML Workspace to manage compute, data, and models.
+Use historical bike rental data from [Capital Bikeshare](https://aka.ms/bike-rentals).
 
-### 2. Data Ingestion
-- Uploaded and registered the dataset to Azure ML from local files.
-- Dataset formatted as a Table (MLTable) for AutoML compatibility.
+1. Go to **Automated ML** under *Authoring*
+2. Click **New Automated ML Job**
+3. Upload dataset:
+   - From local files (download from [aka.ms/bike-rentals](https://aka.ms/bike-rentals))
+   - Name: `bike-rentals`
+   - Format: Table (mltable)
+   - Storage: Azure Blob (workspaceblobstore)
 
-### 3. Model Training with AutoML
-- Selected **Regression** as the task type.
-- Used **Normalized Root Mean Squared Error (NRMSE)** as the evaluation metric.
-- Allowed only **RandomForest** and **LightGBM** for model selection.
-- Limited trials to 3 and enabled early stopping.
-
-### 4. Model Deployment
-- Deployed the best-performing model to **Azure Container Instances** as a REST API.
-- Created a real-time endpoint named `predict-rentals`.
-
-### 5. Model Testing
-- Used the **Test tab** in Azure ML Studio to send a sample JSON payload and receive predictions.
+{SCREENSHOT}
 
 ---
 
-## 📦 Sample Input
+## ✅ Step 3: Configure AutoML Job
+
+### 🎯 Task: Regression
+
+We predict a continuous value (number of rentals), so regression is the appropriate task.
+
+### 🔍 Settings:
+- **Target column**: `rentals`
+- **Metric**: `Normalized Root Mean Squared Error (NRMSE)`
+- **Allowed models**: `RandomForest`, `LightGBM`
+- **Max trials**: `3`
+- **Max concurrent trials**: `3`
+- **Experiment timeout**: `15 mins`
+- **Iteration timeout**: `15 mins`
+- **Early termination**: Enabled
+- **Validation**: 10% Train-validation split
+- **Compute**: Serverless → `Standard_DS3_v2`, 1 instance
+
+{SCREENSHOT}
+
+---
+
+## ✅ Step 4: Monitor Results
+
+1. Let training complete
+2. View the **Overview** tab → best model summary
+3. Click the **Algorithm name** for more info
+4. Go to **Metrics** tab:
+   - Residuals histogram
+   - Predicted vs True plot
+
+{SCREENSHOT}
+
+---
+
+## ✅ Step 5: Deploy the Model
+
+1. From the best model page, click **Deploy**
+2. Settings:
+   - **Endpoint type**: Real-time
+   - **VM**: Standard_DS3_v2 (or available alternative)
+   - **Instance count**: 3
+   - **Inferencing**: Disabled
+   - **Package model**: Disabled
+3. Wait for status to be **Succeeded**
+
+{SCREENSHOT}
+
+---
+
+## ✅ Step 6: Test the Endpoint
+
+1. In **Endpoints**, select your deployed endpoint
+2. Go to the **Test** tab
+3. Replace the default JSON with:
 
 ```json
 {
   "input_data": {
     "columns": [
-      "season", "year", "month", "hour", "holiday", "weekday", "workingday",
-      "weather", "temp", "atemp", "humidity", "windspeed"
+      "day", "mnth", "year", "season", "holiday", "weekday",
+      "workingday", "weathersit", "temp", "atemp", "hum", "windspeed"
     ],
     "index": [0],
-    "data": [[3, 1, 1, 0, 0, 6, 0, 1, 9.84, 14.395, 81, 0]]
+    "data": [[1,1,2022,2,0,1,1,2,0.3,0.3,0.3,0.3]]
   }
 }
 
-🔁 Sample Output
-json
-{
-  "result": [347.959]
-}
+Click Test, and you’ll receive a prediction like:
 
-The model predicts that approximately 348 bike rentals are expected under the given conditions.
+[352.35]
 
-Key Learnings
-Hands-on experience with cloud-based ML pipelines
+📸 Screenshot suggestion: Test tab showing input + prediction
 
-Practical understanding of regression modeling
+Step 7: Clean Up Resources
+To avoid charges:
 
-End-to-end exposure to AutoML training, model selection, and deployment
+Delete the deployed endpoint in ML Studio
 
-Introduction to Azure's REST endpoint testing and compute resource management
+Delete the resource group in Azure Portal if done
 
+📸 Screenshot suggestion: Endpoint delete confirmation
 
-Next Steps
-Improve prediction accuracy by engineering new features (e.g., rush hour indicators)
+🧠 Key Takeaways
+Used Azure AutoML to automate model selection and tuning
 
-Build a web or dashboard frontend for non-technical users to interact with the model
+Trained a real regression model on real-world rental data
 
-Monitor endpoint usage with Application Insights
+Deployed to a live, cloud-hosted REST API for testing
 
-🧠 Definitions
-Regression: A type of ML model that predicts continuous numeric values.
-
-AutoML: Azure service that automates algorithm selection, tuning, and validation.
-
-ACI (Azure Container Instances): Lightweight, serverless containers used for ML model deployment.
-
-NRMSE: Normalized root mean squared error, a common metric to evaluate regression models.
-
-🙋‍♀️ Author
+🙋‍♀️ About the Author
 Taylor Ramble
 IT Architect Specialist | Cyber Operations Grad Student
 📍 Atlanta Public Schools
-
-
+🔗 LinkedIn • 🌐 Portfolio
 
 
