@@ -2,7 +2,7 @@
 
 # 📈 Bike Rental Demand Prediction with Azure AutoML
 
-This project showcases how to build, train, deploy, and test a machine learning regression model using **Azure Machine Learning Studio's Automated ML (AutoML)**. It predicts bike rentals based on environmental and calendar data.
+This project showcases how to build, train, deploy, and test a machine learning regression model using **Azure Machine Learning Studio's Automated ML (AutoML)**. It predicts bike rentals based on environmental and calendar data. I chose this project because it allowed me to train real data with real time endpoints and allowed me a seamless low-code way to incorporate machine learning into my portfolio!
 
 ---
 
@@ -17,11 +17,11 @@ Bike rental services and city planners need accurate forecasts to allocate bikes
 1. Sign in at [Azure Portal](https://portal.azure.com)
 2. Select **+ Create a resource** > Search for **Machine Learning**
 3. Use the following settings:
-   - **Subscription**: Your Azure subscription
-   - **Resource group**: New or existing
+   - **Subscription**: My Azure subscription
+   - **Resource group**: New or existing (rg1)
    - **Region**: East US
    - **Workspace name**: Must be unique
-   - **Other fields**: Leave defaults (Azure will create supporting services)
+  
 4. Click **Review + Create** > then **Create**
 5. After deployment, click **Launch studio**
 
