@@ -27,6 +27,9 @@ Bike rental services and city planners need accurate forecasts to allocate bikes
 
 ![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20073058.png?raw=true)
 
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20073058.png?raw=true)
+
+
 ---
 
 ## ✅ Step 2: Upload & Register Dataset
