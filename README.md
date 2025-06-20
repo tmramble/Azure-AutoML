@@ -25,7 +25,10 @@ Bike rental services and city planners need accurate forecasts to allocate bikes
 4. Click **Review + Create** > then **Create**
 5. After deployment, click **Launch studio**
 
-![Example](https://github.com/tmramble/Azure-AutoML/blob/main/Screenshot%202025-06-20%20073026.png)
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20073058.png?raw=true)
+
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20073058.png?raw=true)
+
 
 ---
 
@@ -112,6 +115,8 @@ We predict a continuous value (number of rentals), so regression is the appropri
     "data": [[1,1,2022,2,0,1,1,2,0.3,0.3,0.3,0.3]]
   }
 }
+```
+
 
 Click Test, and you’ll receive a prediction like:
 
@@ -119,6 +124,7 @@ Click Test, and you’ll receive a prediction like:
 
 📸 Screenshot suggestion: Test tab showing input + prediction
 
+``
 Step 7: Clean Up Resources
 To avoid charges:
 
