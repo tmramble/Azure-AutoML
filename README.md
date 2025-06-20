@@ -122,26 +122,7 @@ Click Test, and you’ll receive a prediction like:
 
 📸 Screenshot suggestion: Test tab showing input + prediction
 
-Step 7: Clean Up Resources
-To avoid charges:
+``
 
-Delete the deployed endpoint in ML Studio
-
-Delete the resource group in Azure Portal if done
-
-📸 Screenshot suggestion: Endpoint delete confirmation
-
-🧠 Key Takeaways
-Used Azure AutoML to automate model selection and tuning
-
-Trained a real regression model on real-world rental data
-
-Deployed to a live, cloud-hosted REST API for testing
-
-🙋‍♀️ About the Author
-Taylor Ramble
-IT Architect Specialist | Cyber Operations Grad Student
-📍 Atlanta Public Schools
-🔗 LinkedIn • 🌐 Portfolio
 
 
