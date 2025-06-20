@@ -12,7 +12,7 @@ Bike rental services and city planners need accurate forecasts to allocate bikes
 
 ---
 
-## ✅ Step 1: Set Up Azure ML Workspace
+##  Step 1: Set Up Azure ML Workspace
 
 1. Sign in at [Azure Portal](https://portal.azure.com)
 2. Select **+ Create a resource** > Search for **Machine Learning**
@@ -26,13 +26,9 @@ Bike rental services and city planners need accurate forecasts to allocate bikes
 5. After deployment, click **Launch studio**
 
 ![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20073058.png?raw=true)
-
-![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20073058.png?raw=true)
-
-
 ---
 
-## ✅ Step 2: Upload & Register Dataset
+##  Step 2: Upload & Register Dataset
 
 Use historical bike rental data from [Capital Bikeshare](https://aka.ms/bike-rentals).
 
@@ -44,46 +40,89 @@ Use historical bike rental data from [Capital Bikeshare](https://aka.ms/bike-ren
    - Format: Table (mltable)
    - Storage: Azure Blob (workspaceblobstore)
 
-{SCREENSHOT}
+ ![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20083323.png)
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20083127.png)
+
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20083358.png)
 
 ---
+## Validate Data
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20083455.png)
 
-## ✅ Step 3: Configure AutoML Job
+##  Step 3: Configure AutoML Job
 
-### 🎯 Task: Regression
+###  Task: Regression
 
 We predict a continuous value (number of rentals), so regression is the appropriate task.
 
-### 🔍 Settings:
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20083208.png)
+
+###  Settings:
 - **Target column**: `rentals`
-- **Metric**: `Normalized Root Mean Squared Error (NRMSE)`
+The target column (rentals) is an integer that represents a quantity, making regression an appropriate choice over classification or clustering.
+
+- **Primary Metric**: NormalizedRootMeanSquaredError (NRMSE)
+Explanation: NRMSE is a scale-independent version of RMSE, making it easier to compare errors across models trained on different datasets or with different target variable scales.
+
+Why it matters: Lower NRMSE indicates better performance. It's used to rank models during automated machine learning (AutoML) runs.
+
+  ![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20083546.png)
+
+  
 - **Allowed models**: `RandomForest`, `LightGBM`
+  
+  RandomForest: A robust, ensemble-based model that handles overfitting well and performs well on structured data.
+
+LightGBM: A gradient boosting framework optimized for performance and speed, especially effective on large datasets with numerical and categorical features.
+
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20083738.png)
+
+
 - **Max trials**: `3`
+- Azure ML will try up to 3 different model configurations. This restricts the number of total training attempts, helping conserve compute time and cost.
+
 - **Max concurrent trials**: `3`
+- Up to 3 trials can run in parallel, taking advantage of available compute nodes. This maximizes speed and reduces total job duration.
+
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20083811.png)
+
 - **Experiment timeout**: `15 mins`
+A hard limit for the entire AutoML job. If it runs longer than 15 minutes, all trials are stopped.
+
 - **Iteration timeout**: `15 mins`
+- A time limit for each individual model training run (trial). Prevents any one model from consuming excessive time.
+
+Threshold: 0.085 (Normalized Root Mean Squared Error)
+The job will terminate early if a model achieves a score equal to or better than 0.085, which represents a low error rate relative to the scale of the data.
+**This ensures efficient use of resources — if an excellent model is found early, there's no need to continue running all trials**
+
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20083811.png)
+
 - **Early termination**: Enabled
 - **Validation**: 10% Train-validation split
 - **Compute**: Serverless → `Standard_DS3_v2`, 1 instance
 
-{SCREENSHOT}
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20084021.png)
 
 ---
 
-## ✅ Step 4: Monitor Results
+##  Step 4: Monitor Results
 
 1. Let training complete
 2. View the **Overview** tab → best model summary
-3. Click the **Algorithm name** for more info
-4. Go to **Metrics** tab:
-   - Residuals histogram
-   - Predicted vs True plot
+   
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20084111.png)
 
-{SCREENSHOT}
+4. Click the **Algorithm name** for more info
+5. Go to **Metrics** tab:
+   - Residuals histogram:  The residuals chart shows the residuals (the differences between predicted and actual values) as a histogram
+   - Predicted vs True plot: The predicted_true chart compares the predicted values against the true values.
+     
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/images/Screenshot%202025-06-20%20084246.png)
 
 ---
 
-## ✅ Step 5: Deploy the Model
+##  Step 5: Deploy the Model
 
 1. From the best model page, click **Deploy**
 2. Settings:
@@ -93,8 +132,6 @@ We predict a continuous value (number of rentals), so regression is the appropri
    - **Inferencing**: Disabled
    - **Package model**: Disabled
 3. Wait for status to be **Succeeded**
-
-{SCREENSHOT}
 
 ---
 
@@ -120,19 +157,17 @@ We predict a continuous value (number of rentals), so regression is the appropri
 
 Click Test, and you’ll receive a prediction like:
 
-[352.35]
+**[352.35]**
 
-📸 Screenshot suggestion: Test tab showing input + prediction
 
-``
 Step 7: Clean Up Resources
+
 To avoid charges:
 
 Delete the deployed endpoint in ML Studio
 
 Delete the resource group in Azure Portal if done
 
-📸 Screenshot suggestion: Endpoint delete confirmation
 
 🧠 Key Takeaways
 Used Azure AutoML to automate model selection and tuning
@@ -141,10 +176,6 @@ Trained a real regression model on real-world rental data
 
 Deployed to a live, cloud-hosted REST API for testing
 
-🙋‍♀️ About the Author
-Taylor Ramble
-IT Architect Specialist | Cyber Operations Grad Student
-📍 Atlanta Public Schools
-🔗 LinkedIn • 🌐 Portfolio
+
 
 
