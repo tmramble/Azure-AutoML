@@ -25,7 +25,7 @@ Bike rental services and city planners need accurate forecasts to allocate bikes
 4. Click **Review + Create** > then **Create**
 5. After deployment, click **Launch studio**
 
-{SCREENSHOT}
+![Example](https://github.com/tmramble/Azure-AutoML/blob/main/Screenshot%202025-06-20%20073026.png)
 
 ---
 
